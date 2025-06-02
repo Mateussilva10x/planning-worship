@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  name        String
+  email       String   @unique
+  password    String   // hashed
+  role        Role     @default(MEMBER)
+  memberships Membership[]
+  participations ScheduleParticipation[]
+  messages    Message[]
+  createdAt   DateTime @default(now())
+}
+
+model Group {
+  id          String       @id @default(cuid())
+  name        String
+  memberships Membership[]
+  schedules   Schedule[]
+  repertoire  RepertoireItem[]
+  createdAt   DateTime     @default(now())
+  messages    Message[]
+}
+
+model Membership {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  group     Group    @relation(fields: [groupId], references: [id])
+  groupId   String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, groupId])
+}
+
+model Schedule {
+  id            String                  @id @default(cuid())
+  date          DateTime
+  group         Group                   @relation(fields: [groupId], references: [id])
+  groupId       String
+  participations ScheduleParticipation[]
+  createdAt     DateTime                @default(now())
+}
+
+model ScheduleParticipation {
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  schedule   Schedule @relation(fields: [scheduleId], references: [id])
+  scheduleId String
+  confirmed  Boolean  @default(false)
+}
+
+model RepertoireItem {
+  id        String   @id @default(cuid())
+  title     String
+  artist    String
+  group     Group    @relation(fields: [groupId], references: [id])
+  groupId   String
+  createdAt DateTime @default(now())
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  content   String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  group     Group    @relation(fields: [groupId], references: [id])
+  groupId   String
+  createdAt DateTime @default(now())
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}
