@@ -1,8 +1,9 @@
+import MainLayout from "@/components/layout/MainLayout";
+
 export default function Home() {
   return (
-    <main className="min-h-screen flex items-center justify-center bg-blue-900 text-white">
-      <h1 className="text-4xl font-bold">Tailwind funcionando! 🙌</h1>
-    </main>
-  )
+    <MainLayout>
+      <h1 className="text-2xl font-semibold">Welcome to Planning Worship</h1>
+    </MainLayout>
+  );
 }
-
