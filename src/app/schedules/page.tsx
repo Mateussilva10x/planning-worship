@@ -3,19 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import MainLayout from "@/components/layout/MainLayout";
 import { Key } from "react";
-
-export async function getSchedules() {
-  const res = await fetch(`${process.env.BASE_URL}/api/schedules`, {
-    cache: "no-store",
-  });
-
-  if (!res.ok) {
-    console.error("Erro ao buscar schedules:", await res.text());
-    throw new Error("Erro ao buscar schedules");
-  }
-
-  return res.json();
-}
+import { getSchedules } from "@/lib/api";
 
 export default async function SchedulePage() {
   const schedules = await getSchedules();
