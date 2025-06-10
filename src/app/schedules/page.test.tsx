@@ -2,7 +2,6 @@ import { render, screen } from "@testing-library/react";
 import SchedulePage from "./page";
 import { describe, it, expect, vi } from "vitest";
 
-// Mock da função getSchedules
 vi.mock("@/lib/api", () => ({
   getSchedules: async () => [
     {
